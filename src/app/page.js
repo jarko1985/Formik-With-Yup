@@ -13,8 +13,10 @@ export default function Home() {
       first_name: "",
       last_name: "",
       email: "",
+      password:"",
       country: "",
-      terms: "",
+      gender:"",
+      terms: false,
     },
     validationSchema: Yup.object({
       first_name: Yup.string()
@@ -26,7 +28,15 @@ export default function Home() {
       email: Yup.string()
         .email("Invalid Email")
         .required("Email Address is required"),
-        terms: Yup.array().required("Terms of service must be checked")
+      password:Yup.string().required("Password is required...")
+      .min(8, "Must be 8 characters or more")
+      .matches(/[a-z]+/, "One lowercase character")
+      .matches(/[A-Z]+/, "One uppercase character")
+      .matches(/[@$!%*#?&]+/, "One special character")
+      .matches(/\d+/, "One number"),
+       gender:Yup.string()
+      .required('Please select your gender.'),
+      terms: Yup.bool().oneOf([true],'Please agree to the terms and conditions to proceed.')
     }),
     onSubmit: (values) => {
       console.log(values);
@@ -36,20 +46,11 @@ export default function Home() {
     <main className="flex min-h-screen items-center ">
       <form
         onSubmit={formik.handleSubmit}
-        className="bg-white flex rounded-lg font-mono p-10 w-1/2 mx-auto"
+        className="bg-white flex rounded-lg font-mono p-10 w-1/2 mx-auto border border-blue-500"
       >
         <div className="mt-6">
-          <div className="pb-4">
-            <label
-              className={`block text-sm pb-2 ${
-                formik.errors.first_name ? "text-red-500" : ""
-              }`}
-              htmlFor="first_name"
-            >
-              {formik.touched.first_name && formik.errors.first_name
-                ? formik.errors.first_name
-                : ""}
-            </label>
+          <div className="pb-4 relative z-0">
+           
 
             <input
               type="text"
@@ -57,9 +58,18 @@ export default function Home() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.first_name}
-              placeholder="Enter your first name"
-              className="w-[100%] border-2 border-gray-500 p-2 rounded-md focus:border-2 focus:border-teal-500 focus:ring-teal-500"
+              placeholder=""
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             />
+             <label
+              className='absolute text-sm text-black dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto'
+              htmlFor="first_name"
+            >
+              first name
+            </label>
+            <p className="text-red-500">{formik.touched.first_name && formik.errors.first_name
+                ? formik.errors.first_name
+                : ""}</p>
           </div>
           <div className="pb-4">
             <label
@@ -104,6 +114,27 @@ export default function Home() {
             />
           </div>
           <div className="pb-4">
+          <label
+              className={`block text-sm pb-2 ${
+                formik.errors.password ? "text-red-500" : ""
+              }`}
+              htmlFor="password"
+            >
+              {formik.touched.password && formik.errors.password
+                ? formik.errors.password
+                : ""}
+            </label>
+            <input
+              type="password"
+              name="password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+              placeholder="Enter your password"
+              className="w-[100%] border-2 border-gray-500 p-2 rounded-md focus:border-2 focus:border-teal-500 focus:ring-teal-500"
+            />
+          </div>
+          <div className="pb-4">
             <label
               className={`block text-sm pb-2 ${
                 formik.errors.country ? "text-red-500" : ""
@@ -112,7 +143,7 @@ export default function Home() {
             >
               {formik.touched.country && formik.errors.country
                 ? formik.errors.country
-                : ""}
+                : "Select your Country"}
             </label>
             <select
               value={formik.values.country}
@@ -130,6 +161,41 @@ export default function Home() {
                 );
               })}
             </select>
+          </div>
+          <div className="pb-4 space-x-1">
+          <label
+              className={`text-sm pb-2`}
+              htmlFor="gender"
+            >
+              Male
+            </label> 
+            <input 
+            type="radio"  
+            id="male"
+            value="male"
+            name="gender"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            defaultChecked={formik.values.gender=== "male"}
+            /> 
+            <label
+              className={`text-sm pb-2`}
+              htmlFor="gender"
+            >
+              Female
+            </label> 
+            <input 
+            type="radio"  
+            id="female"
+            value="female"
+            name="gender"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            defaultChecked={formik.values.gender=== "female"}
+            /> 
+            <p className="text-red-500">{formik.touched.gender && formik.errors.gender
+                ? formik.errors.gender
+                : ""}</p> 
           </div>
           <div className="pb-4">
             <label
@@ -160,7 +226,7 @@ export default function Home() {
           </div>
           <button
             type="submit"
-            className="bg-teal-500 font-bold text-sm text-white py-3 px-4 mt-6 rounded-lg"
+            className="bg-teal-500 font-bold text-sm text-white py-3 px-4 mt-6 rounded-lg border border-transparent shadow-xl shadow-gray-400 transition-all duration-300 hover:text-teal-500 hover:bg-white hover:border hover:border-teal-500"
           >
             Submit
           </button>

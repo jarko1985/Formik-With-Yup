@@ -17,6 +17,7 @@ const Home=()=> {
       country: "",
       gender:"",
       terms: false,
+      message:""
     },
     validationSchema: Yup.object({
       first_name: Yup.string()
@@ -36,7 +37,8 @@ const Home=()=> {
       .matches(/\d+/, "One number"),
        gender:Yup.string()
       .required('Please select your gender.'),
-      terms: Yup.bool().oneOf([true],'Please agree to the terms and conditions to proceed.')
+      terms: Yup.bool().oneOf([true],'Please agree to the terms and conditions to proceed.'),
+      message:Yup.string().required('Message is Required').min(5,"Type at least 5 letters")
     }),
     onSubmit: (values) => {
       console.log(values);
@@ -151,7 +153,7 @@ const Home=()=> {
               name="country"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="border-2 border-gray-500 p-2 rounded-md focus:border-2 focus:border-teal-500 focus:ring-teal-500"
+              className="w-[100%] border-2 border-gray-500 p-2 rounded-md focus:border-2 focus:border-teal-500 focus:ring-teal-500"
             >
               {countries.map((el, index) => {
                 return (
@@ -161,6 +163,25 @@ const Home=()=> {
                 );
               })}
             </select>
+          </div>
+          <div className="pb-4">
+            <label className={`block text-sm pb-2 ${
+                formik.errors.message ? "text-red-500" : ""
+              }`}
+              htmlFor="message">
+              {formik.touched.message && formik.errors.message
+                ? formik.errors.message
+                : "Type your Message:"}    
+            </label>
+            <textarea
+            className="w-[100%] border-2 border-gray-500 p-2 rounded-md focus:border-2 focus:border-teal-500 focus:ring-teal-500"
+              value={formik.values.message}
+              id="message"
+              name="message"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            
+            ></textarea>
           </div>
           <div className="pb-4 space-x-1">
           <label

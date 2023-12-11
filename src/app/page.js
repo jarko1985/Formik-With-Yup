@@ -4,9 +4,19 @@ import { useFormik } from "formik";
 import countries from "../../public/data/countries.json";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
-
+import axios from 'axios';
+// import { sendOTP } from "../../helpers/twilioHelper";
 
 const Home=()=> {
+  function generateOTP(length) {
+    const digits = '0123456789';
+    let OTP = '';
+  
+    for (let i = 0; i < length; i++) {
+      OTP += digits[Math.floor(Math.random() * 10)];
+    }
+    return OTP;
+  }
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -40,8 +50,10 @@ const Home=()=> {
       terms: Yup.bool().oneOf([true],'Please agree to the terms and conditions to proceed.'),
       message:Yup.string().required('Message is Required').min(5,"Type at least 5 letters")
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async(values) => {
+
+
+      console.log(result);
     },
   });
   return (

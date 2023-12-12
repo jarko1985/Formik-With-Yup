@@ -5,6 +5,7 @@ import countries from "../../public/data/countries.json";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import axios from 'axios';
+import { sendForm } from "../../lib/api";
 // import { sendOTP } from "../../helpers/twilioHelper";
 
 const Home=()=> {
@@ -51,9 +52,7 @@ const Home=()=> {
       message:Yup.string().required('Message is Required').min(5,"Type at least 5 letters")
     }),
     onSubmit: async(values) => {
-
-
-      console.log(result);
+      await sendForm(values);
     },
   });
   return (
